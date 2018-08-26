@@ -4,36 +4,20 @@
 #include <string>
 #include <vector>
 
-class Logger {
+#include "logger.h"
+
+class CommandAccumulator {
 public:
-    Logger(Logger const&) = delete;
 
-    Logger& operator=(Logger const&) = delete;
+};
 
-    static Logger& get_logger() {
-        static Logger logger;
-        return logger;
-    }
+class CommandReader {
+public:
 
-    template<typename T>
-    Logger& operator<<(const T& value) {
-        std::cout << value;
-        return Logger::get_logger();
-    }
-
-    void open_file(std::string file_name) {
-//        std::ofstream file(file_name);
-    }
-
-private:
-    Logger() = default;
-
-    ~Logger() = default;
-
-//    std::ofstream current_file;
 };
 
 void print_commands(const std::vector<std::string>& commands) {
+    Logger::get_logger().add_stream("stdout", std::cout);
     for (size_t i = 0; i < commands.size(); i++) {
         if (i > 0) {
             Logger::get_logger() << " ";
@@ -51,29 +35,33 @@ int main(int argc, char *argv[]) {
     std::string current_command;
     std::vector<std::string> current_bulk;
     current_bulk.reserve(num_commands_in_bulk);
-    while (std::cin >> current_command) {
+
+//    std::fstream from_file("../data/test1.in.txt");
+//    auto& source_stream = from_file;
+    auto& source_stream = std::cin;
+
+    while (source_stream >> current_command) {
         if (current_command == "{") {
             num_brackets++;
         } else if (current_command == "}") {
-            if (num_brackets > 0) {
-                num_brackets--;
-                if (num_brackets == 0) {
-                    print_commands(current_bulk);
-                    current_bulk.clear();
-                }
-            } else {
-                Logger::get_logger() << "Incorrect bracket" << "\n";
+            if (num_brackets <= 0) throw std::logic_error("Incorrect bracket");
+
+            num_brackets--;
+            if (num_brackets == 0) {
+                print_commands(current_bulk);
+                current_bulk.clear();
             }
         } else { // normal command
-            if (current_bulk.empty()) {
-
-            }
             current_bulk.emplace_back(current_command);
             if (num_brackets == 0 && current_bulk.size() == num_commands_in_bulk) {
                 print_commands(current_bulk);
                 current_bulk.clear();
             }
         }
+    }
+    if (!current_bulk.empty() && num_brackets == 0) {
+        print_commands(current_bulk);
+        current_bulk.clear();
     }
 
     return 0;

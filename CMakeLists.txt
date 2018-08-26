@@ -8,7 +8,9 @@ endif()
 
 set(CMAKE_CXX_STANDARD 17)
 
+add_library(logger logger.cpp logger.h)
 add_executable(bulk bulk.cpp)
+target_link_libraries(bulk logger)
 
 install(TARGETS bulk RUNTIME DESTINATION bin)
 
