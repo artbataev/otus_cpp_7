@@ -64,11 +64,14 @@ public:
             if (current_command == "{") {
                 num_brackets++;
             } else if (current_command == "}") {
-                if (num_brackets <= 0) throw std::logic_error("Incorrect bracket");
-                num_brackets--;
-                if (num_brackets == 0) {
-                    accumulator.log_commands();
-                    accumulator.clear();
+                if (num_brackets <= 0) {
+                    std::cerr << "Warning: Unexpected bracket, ignoring" << std::endl;
+                } else {
+                    num_brackets--;
+                    if (num_brackets == 0) {
+                        accumulator.log_commands();
+                        accumulator.clear();
+                    }
                 }
             } else { // normal command
                 accumulator.add_command(current_command);
