@@ -21,14 +21,12 @@ public:
     }
 
     void log_commands() {
-        if(empty()) return; // log nothing
+        if (empty()) return; // log nothing
         std::ofstream f(get_log_file_name(bulk_first_command_time));
         Logger::get_logger().add_stream("file", f);
+        Logger::get_logger() << "bulk:";
         for (size_t i = 0; i < commands.size(); i++) {
-            if (i > 0) {
-                Logger::get_logger() << " ";
-            }
-            Logger::get_logger() << commands[i];
+            Logger::get_logger() << " " << commands[i];
         }
         Logger::get_logger() << "\n";
         Logger::get_logger().remove_stream("file");
