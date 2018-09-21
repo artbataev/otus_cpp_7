@@ -11,7 +11,8 @@ class CommandAccumulator {
 public:
     void add_command(const std::string& command) {
         if (empty()) {
-            bulk_first_command_time = std::chrono::system_clock::now().time_since_epoch().count();
+            using namespace std::chrono;
+            bulk_first_command_time = duration_cast<seconds>(system_clock::now().time_since_epoch()).count();
         }
         commands.emplace_back(command);
     }
