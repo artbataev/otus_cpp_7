@@ -15,9 +15,14 @@ target_link_libraries(command logger)
 add_executable(bulk src/bulk.cpp)
 target_link_libraries(bulk logger command)
 
-add_library(logger logger.cpp logger.h)
-add_executable(bulk bulk.cpp)
-target_link_libraries(bulk logger)
+
+find_package(GTest REQUIRED)
+add_executable(test_${PROJECT_NAME} test/test_bulk.cpp)
+target_link_libraries(test_${PROJECT_NAME} logger command ${GTEST_LIBRARIES})
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    target_link_libraries(test_${PROJECT_NAME} pthread)
+endif()
+
 
 install(TARGETS bulk RUNTIME DESTINATION bin)
 
@@ -30,3 +35,6 @@ set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set(CPACK_PACKAGE_CONTACT artbataev@gmail.com)
 
 include(CPack)
+
+enable_testing()
+add_test(test test_${PROJECT_NAME})
