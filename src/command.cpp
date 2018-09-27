@@ -41,6 +41,10 @@ void CommandProcessor::process_commands(std::istream& source_stream) {
 
     while (source_stream >> current_command) {
         if (current_command == "{") {
+            if (num_brackets == 0) {
+                accumulator.log_commands();
+                accumulator.clear();
+            }
             num_brackets++;
         } else if (current_command == "}") {
             if (num_brackets <= 0) {
