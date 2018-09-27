@@ -26,6 +26,11 @@ void CommandAccumulator::log_commands() {
     Logger::get_logger().remove_stream("file");
 }
 
+void CommandAccumulator::log_commands_and_clear() {
+    log_commands();
+    clear();
+}
+
 size_t CommandAccumulator::size() {
     return commands.size();
 }
@@ -41,31 +46,23 @@ void CommandProcessor::process_commands(std::istream& source_stream) {
 
     while (source_stream >> current_command) {
         if (current_command == "{") {
-            if (num_brackets == 0) {
-                accumulator.log_commands();
-                accumulator.clear();
-            }
+            if (num_brackets == 0)
+                accumulator.log_commands_and_clear();
             num_brackets++;
         } else if (current_command == "}") {
             if (num_brackets <= 0) {
                 std::cerr << "Warning: Unexpected bracket, ignoring" << std::endl;
             } else {
                 num_brackets--;
-                if (num_brackets == 0) {
-                    accumulator.log_commands();
-                    accumulator.clear();
-                }
+                if (num_brackets == 0)
+                    accumulator.log_commands_and_clear();
             }
         } else { // normal command
             accumulator.add_command(current_command);
-            if (num_brackets == 0 && accumulator.size() == num_commands_in_bulk) {
-                accumulator.log_commands();
-                accumulator.clear();
-            }
+            if (num_brackets == 0 && accumulator.size() == num_commands_in_bulk)
+                accumulator.log_commands_and_clear();
         }
     }
-    if (!accumulator.empty() && num_brackets == 0) {
-        accumulator.log_commands();
-        accumulator.clear();
-    }
+    if (!accumulator.empty() && num_brackets == 0)
+        accumulator.log_commands_and_clear();
 }
