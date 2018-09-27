@@ -7,6 +7,13 @@ else()
 endif()
 
 set(CMAKE_CXX_STANDARD 17)
+include_directories("${PROJECT_SOURCE_DIR}/include")
+
+add_library(logger src/logger.cpp include/logger.h)
+add_library(command src/command.cpp include/command.h)
+target_link_libraries(command logger)
+add_executable(bulk src/bulk.cpp)
+target_link_libraries(bulk logger command)
 
 add_library(logger logger.cpp logger.h)
 add_executable(bulk bulk.cpp)
