@@ -34,11 +34,11 @@ TEST_P(AssignmentTestFromFile, AssignmentExample)
 }
 
 INSTANTIATE_TEST_CASE_P(MyGroup, AssignmentTestFromFile, ::testing::Values(
-        std::make_pair(3, InOutFiles{"../data/test1.in.txt", "../data/test1.out.txt"}),
-        std::make_pair(3, InOutFiles{"../data/test2.in.txt", "../data/test2.out.txt"}),
-        std::make_pair(3, InOutFiles{"../data/test3.in.txt", "../data/test3.out.txt"}),
-        std::make_pair(3, InOutFiles{"../data/test4.in.txt", "../data/test4.out.txt"}),
-        std::make_pair(2, InOutFiles{"../data/test5.in.txt", "../data/test5.out.txt"}) // output all before first bracket
+        std::make_pair(3, InOutFiles{"../test/data/test1.in.txt", "../test/data/test1.out.txt"}),
+        std::make_pair(3, InOutFiles{"../test/data/test2.in.txt", "../test/data/test2.out.txt"}),
+        std::make_pair(3, InOutFiles{"../test/data/test3.in.txt", "../test/data/test3.out.txt"}),
+        std::make_pair(3, InOutFiles{"../test/data/test4.in.txt", "../test/data/test4.out.txt"}),
+        std::make_pair(2, InOutFiles{"../test/data/test5.in.txt", "../test/data/test5.out.txt"}) // output all before first bracket
 ));
 
 int main(int argc, char **argv) {
